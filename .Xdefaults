@@ -1,0 +1,53 @@
+
+
+*highlightColor:#444
+*background:  #000000
+*foreground:  #cccccc
+*color0:      rgb:24/24/24
+*color8:      rgb:82/82/82
+*color1:      rgb:bf/79/79
+*color9:      rgb:f4/a4/5f
+*color2:      rgb:97/b2/6b
+*color10:     rgb:c5/f7/79
+*color3:      rgb:cd/cd/a1
+*color11:     rgb:ff/ff/af
+*color4:      rgb:86/a2/be
+*color12:     rgb:98/af/d9
+*color5:      rgb:96/3c/59
+*color13:     rgb:ef/9e/be
+*color6:      rgb:7f/9f/7f
+*color14:     rgb:71/be/be
+*color7:      rgb:ff/ff/ff
+*color15:     rgb:de/de/de
+
+*scrollBar:false
+*imLocale:fr_FR.UTF8
+*saveLines:5000
+
+URxvt*termName: rxvt
+!URxvt*font: xft:Crisp:size=12
+!URxvt*fontBold: xft:Crisp:size=12
+URxvt*font: xft:Monaco:size=9
+URxvt*fontBold: xft:Monaco:Bold:size=9
+!URxvt.perl-lib: ~/.urxvt/
+URxvt*externalBorder:   0
+URxvt*internalBorder:   2
+URxvt.perl-ext: default,matcher,selection
+!URxvt.keysym.M-y: perl:mark-and-yank:activate_mark_mode
+!URxvt.keysym.M-u: perl:mark-and-yank:activate_mark_url_mode
+URxvt.underlineURLs: true
+URxvt.scrollBar: False
+URxvt.linespace: 5
+URxvt.internalBorder: 6
+URxvt*geometry: 100x70
+URxvt.urlLauncher: chromium
+URxvt.matcher.button: 1
+URxvt*matcher.pattern.1: \\b(mailto|http|https|ftp|file):[/]*[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt*matcher.pattern.2: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+
+xpdf*enableFreetype: yes	
+xpdf*antialias: yes
+xpdf*urlCommand: chromium %s
+xpdf*viKeys: true
+
+Xcursor*theme: Obsidian
