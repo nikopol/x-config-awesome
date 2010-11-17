@@ -152,7 +152,7 @@ if MOUNTS then
 	for i=1,#MOUNTS do
 		fs[i] = awful.widget.progressbar()
 		fs[i]:set_vertical(true):set_ticks(true)
-		fs[i]:set_height(14):set_width(8):set_ticks_size(2)
+		fs[i]:set_height(16):set_width(8):set_ticks_size(2)
 		fs[i]:set_border_color(beautiful.border_widget)
 		fs[i]:set_background_color(beautiful.fg_off_widget)
 		fs[i]:set_gradient_colors({
