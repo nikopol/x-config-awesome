@@ -1,2 +1,4 @@
 my personal awesome config
-if you wanna test it, copy everything to your home and adapt .config/awesome/config.lua
+if you wanna test it, run ./install
+(install will copy default/* to ~/* and $HOSTNAME/* to ~/*)
+then adapt ~/.config/awesome/config.lua

@@ -1,0 +1,121 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Cwd 'abs_path';
+use Sys::Hostname;
+
+our $VER = "0.2";
+
+my $home = $ENV{HOME};
+my $host = hostname;
+my $path = abs_path($0);
+my $gitremote = 'origin';
+$path =~ s/\/[^\/]*$//;
+$path .= '/';
+
+my $act = shift || 'install';
+$act =~ s/^-+//;
+
+sub rset {
+	my $path = shift;
+	my $from = shift || $path;
+	my $nb = 0;
+	my @subs;
+	my $dst = $home.substr($path,length $from);
+	print "installing $dst ... ";
+	if( length $dst ) {
+		if( ! -d $dst && ! mkdir($dst) ) {
+			warn "unable to make dir $dst\n";
+			return 0;
+		}
+	}
+	opendir(my $dir, $path) or die "unable to read directory\n";
+	while( ($_ = readdir($dir)) ) {
+		if( $_ ne "." && $_ ne '..' ) {
+			my $fn = "$path/$_";
+			if( -d $fn ) {
+				push @subs, $fn;
+			} else {
+				$nb++ if system(('cp','-pf',$fn,$dst.'/'.$_)) == 0;
+			}
+		}
+	}
+	closedir $dir;
+	print "$nb file".($nb>1?"s":"")."\n";
+	$nb += rset($_,$from) foreach( @subs );
+	$nb;
+}
+
+sub rget {
+	my $path = shift;
+	my $skip = shift;
+	my $from = shift || $path;
+	my $nb = 0;
+	my @subs;
+	my $dst = $home.substr($path,length $from);
+	print "updating $dst ... ";
+	opendir(my $dir, $path) or die "unable to read directory\n";
+	while( ($_ = readdir($dir)) ) {
+		if( $_ ne "." && $_ ne '..' ) {
+			my $fn = "$path/$_";
+			if( -d $fn ) {
+				push @subs, $_;
+			} elsif( !$skip || ! -f "$skip/$_" ) {
+				$nb++ if system(('cp','-pu',$dst.'/'.$_,$fn)) == 0;
+			}
+		}
+	}
+	closedir $dir;
+	print "$nb file".($nb>1?"s":"")."\n";
+	$nb += rget("$path/$_",($skip?"$skip/$_":undef),$from) foreach( @subs );
+	$nb;
+}
+
+
+if( $act =~ /^i/i ) {
+
+	print "> install from $path to $home\n";
+	print "> ".rset($path.'default')." default files installed\n";
+	print "> ".rset($path.$host)." $host files installed\n" if $host && -d $path.$host;
+
+} elsif( $act =~ /^u/i ) {
+
+	my $git = @ARGV ? join(' ',@ARGV) : undef;
+	my $gitbranch;
+	if( $git ) {
+		$git =~ s/'/\\'/g;
+		$gitbranch = `git branch | egrep ^\*`;
+		$gitbranch =~ s/\* |\n//g;
+		die( "unable to get current git branch\n" ) unless $gitbranch;
+		print "> git pull $gitremote $gitbranch\n";
+		print `git pull $gitremote $gitbranch`;
+	}		
+
+	print "> update $path from $home\n";
+	print "> ".rget($path.'default',$path.$host)." default files updated\n";
+	print "> ".rget($path.$host)." $host files updated\n" if $host && -d $path.$host;
+
+	if( $git ) {
+		print "> git commit -m '$git' -a\n";
+		print `git commit -m '$git' -a`;
+		print "> git push $gitremote $gitbranch\n";
+		print `git push $gitremote $gitbranch`;
+	}
+
+} else {
+
+	print <<EOHELP
+conf install $VER - niko
+
+* uses cases *
+install from repository: $0
+      update repository: $0 u[pdate] [message]
+
+if message is provided for an update, git is managed like that :
+git pull, update from $home, git commit message, git push
+
+EOHELP
+}
+0;
