@@ -188,19 +188,30 @@ end
 -- }}}
 
 -- {{{ Network usage
-dnicon = widget({ type = "imagebox" })
-upicon = widget({ type = "imagebox" })
-dnicon.image = image(beautiful.widget_net)
-upicon.image = image(beautiful.widget_netup)
--- Initialize widget
-netwidget = widget({ type = "textbox" })
--- Register widget
-vicious.register(
-	netwidget,
-	vicious.widgets.net,
-	'<span color="'  .. beautiful.fg_netdn_widget ..'">${' .. NETINT .. ' down_kb}</span> <span color="'  .. beautiful.fg_netup_widget ..'">${' .. NETINT .. ' up_kb}</span>', 
-	3
-)
+if NETINT then
+	dnicon = widget({ type = "imagebox" })
+	dnicon.image = image(beautiful.widget_net)
+	dngraph = awful.widget.graph()
+	dngraph:set_width(20):set_height(14)
+	dngraph:set_scale(true)
+	dngraph:set_background_color(beautiful.fg_off_widget)
+	dngraph:set_color(beautiful.fg_netdn_widget)
+	dntext = widget({ type = "textbox" })
+	upicon = widget({ type = "imagebox" })
+	upicon.image = image(beautiful.widget_netup)
+	upgraph = awful.widget.graph()
+	upgraph:set_width(20):set_height(14)
+	upgraph:set_scale(true)
+	upgraph:set_background_color(beautiful.fg_off_widget)
+	upgraph:set_color(beautiful.fg_netup_widget)
+	uptext = widget({ type = "textbox" })
+	-- Register widget
+	vicious.register(uptext, vicious.widgets.net, '<span color="'..beautiful.fg_netup_widget..'">${'..NETINT..' up_kb}</span>', 2)
+	vicious.register(dntext, vicious.widgets.net, '<span color="'..beautiful.fg_netdn_widget..'">${'..NETINT..' down_kb}</span>', 2)
+	vicious.register(upgraph, vicious.widgets.net, '${'..NETINT..' up_mb}', 2)
+	vicious.register(dngraph, vicious.widgets.net, '${'..NETINT..' down_mb}', 2)
+	netwidget = { separator, upicon, uptext, upgraph.widget, separator, dngraph.widget, dntext, dnicon }
+end
 -- }}}
 
 -- {{{ GMAIL
@@ -223,7 +234,7 @@ if GMAIL then
 	)
 	-- Register buttons
 	mailwidget:buttons(awful.util.table.join(
-		awful.button({ }, 1, function () exec(browser .. " https://mail.google.com/mail/?shva=1#inbox") end)
+		awful.button({ }, 1, function () exec(BROWSER .. " https://mail.google.com/mail/?shva=1#inbox") end)
 	))
 end
 -- }}}
@@ -410,7 +421,7 @@ for s = 1, screen.count() do
 			volwidget  and { separator, volwidget, volbar.widget, volicon } or {},
 			orgwidget  and { separator, orgwidget, orgicon } or {},
 			mailwidget and { separator, mailwidget, mailicon } or {},
-			netwidget and { separator, upicon, netwidget, dnicon } or {},
+			netwidget or {},
 			fswidgets or {},
 			memwidget and { separator, memwidget, membar.widget, memicon } or {},
 			batwidget and { separator, batwidget, batbar.widget, baticon } or {},
@@ -457,7 +468,7 @@ clientbuttons = awful.util.table.join(
 -- {{{ Global keys
 globalkeys = awful.util.table.join(
 	-- {{{ Applications
-	awful.key({ MODKEY }, "w", function () exec(browser) end),
+	awful.key({ MODKEY }, "w", function () exec(BROWSER) end),
 	awful.key({ MODKEY }, "Return", function () exec(TERM) end),
 	awful.key({ MODKEY, "Shift" }, "l", function () exec(LOCKER) end),
 	-- }}}
