@@ -79,6 +79,8 @@ if( $act =~ /^i/i ) {
 	print "> install from $path to $home\n";
 	print "> ".rset($path.'default')." default files installed\n";
 	print "> ".rset($path.$host)." $host files installed\n" if $host && -d $path.$host;
+	print "> updating font cache...\n";
+	`fc-cache -vf`;
 
 } elsif( $act =~ /^u/i ) {
 
