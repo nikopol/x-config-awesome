@@ -197,6 +197,8 @@ if NETINT then
 	dngraph:set_background_color(beautiful.fg_off_widget)
 	dngraph:set_color(beautiful.fg_netdn_widget)
 	dntext = widget({ type = "textbox" })
+	dntext.width = 55
+	dntext.align = "left"
 	upicon = widget({ type = "imagebox" })
 	upicon.image = image(beautiful.widget_netup)
 	upgraph = awful.widget.graph()
@@ -205,11 +207,13 @@ if NETINT then
 	upgraph:set_background_color(beautiful.fg_off_widget)
 	upgraph:set_color(beautiful.fg_netup_widget)
 	uptext = widget({ type = "textbox" })
+	uptext.width = 55
+	uptext.align = "right"
 	-- Register widget
-	vicious.register(uptext, vicious.widgets.net, '<span color="'..beautiful.fg_netup_widget..'">${'..NETINT..' up_kb}</span>', 2)
-	vicious.register(dntext, vicious.widgets.net, '<span color="'..beautiful.fg_netdn_widget..'">${'..NETINT..' down_kb}</span>', 2)
-	vicious.register(upgraph, vicious.widgets.net, '${'..NETINT..' up_mb}', 2)
-	vicious.register(dngraph, vicious.widgets.net, '${'..NETINT..' down_mb}', 2)
+	vicious.register(uptext, vicious.widgets.net, '<span color="'..beautiful.fg_netup_widget..'">${'..NETINT..' up_kb}</span>', 1)
+	vicious.register(dntext, vicious.widgets.net, '<span color="'..beautiful.fg_netdn_widget..'">${'..NETINT..' down_kb}</span>', 1)
+	vicious.register(upgraph, vicious.widgets.net, '${'..NETINT..' up_kb}', 1)
+	vicious.register(dngraph, vicious.widgets.net, '${'..NETINT..' down_kb}', 1)
 	netwidget = { separator, upicon, uptext, upgraph.widget, separator, dngraph.widget, dntext, dnicon }
 end
 -- }}}
@@ -221,6 +225,8 @@ if GMAIL then
 	mailicon.image = image(beautiful.widget_mail)
 	-- Initialize widget
 	mailwidget = widget({ type = "textbox" })
+	mailwidget.width = 20
+	mailwidget.align = "center"
 	mailtip = awful.tooltip({ objects = { mailwidget } })
 	-- Register widget
 	vicious.cache(vicious.widgets.gmail)
