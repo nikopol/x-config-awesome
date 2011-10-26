@@ -9,6 +9,9 @@
 
 -- {{{ Grab environment
 local pairs = pairs
+local rawget = rawget
+local require = require
+local tonumber = tonumber
 local io = { open = io.open }
 local setmetatable = setmetatable
 local getmetatable = getmetatable
@@ -28,6 +31,13 @@ local scroller = {}
 -- }}}
 
 -- {{{ Helper functions
+-- {{{ Loader of vicious modules
+function wrequire(table,  key)
+    local module = rawget(table,  key)
+    return module or require(table._NAME .. "." .. key)
+end
+-- }}}
+
 -- {{{ Expose path as a Lua table
 function pathtotable(dir)
     return setmetatable({ _path = dir },
@@ -53,7 +63,9 @@ end
 -- {{{ Format a string with args
 function format(format, args)
     for var, val in pairs(args) do
-        format = format:gsub("$" .. var, val)
+        format = format:gsub("$" .. (tonumber(var) and var or
+            var:gsub("[-+?*]", function(i) return "%"..i end)),
+        val)
     end
 
     return format

@@ -1,7 +1,8 @@
 ---------------------------------------------------
 -- Licensed under the GNU General Public License v2
---  * (c) 2010, Adrian C. <anrxc@sysphere.org>
+--  * (c) 2011, Adrian C. <anrxc@sysphere.org>
 --  * (c) 2009, Lucas de Vries <lucas@glacicle.com>
+--  * (c) 2011, Jörg Thalheim <jthalheim@gmail.com>
 ---------------------------------------------------
 
 -- {{{ Grab environment
@@ -11,7 +12,7 @@ local setmetatable = setmetatable
 local math = { floor = math.floor }
 local table = { insert = table.insert }
 local string = {
-    find = string.find,
+    sub = string.sub,
     gmatch = string.gmatch
 }
 -- }}}
@@ -32,43 +33,41 @@ local function worker(format)
 
     -- Get CPU stats
     for line in io.lines("/proc/stat") do
-        if string.find(line, "^cpu%d") then
-            cpu_lines[#cpu_lines+1] = {}
+        if string.sub(line, 1, 3) ~= "cpu" then break end
 
-            for i in string.gmatch(line, "[%s]+([%d]+)") do
-                  table.insert(cpu_lines[#cpu_lines], i)
-            end
+        cpu_lines[#cpu_lines+1] = {}
+
+        for i in string.gmatch(line, "[%s]+([^%s]+)") do
+            table.insert(cpu_lines[#cpu_lines], i)
         end
     end
 
     -- Ensure tables are initialized correctly
-    while #cpu_total < #cpu_lines do
-        table.insert(cpu_total,  0)
-        table.insert(cpu_active, 0)
-        table.insert(cpu_usage,  0)
+    for i = #cpu_total + 1, #cpu_lines do
+        cpu_total[i]  = 0
+        cpu_usage[i]  = 0
+        cpu_active[i] = 0
     end
 
-    local total_new   = {}
-    local active_new  = {}
-    local diff_total  = {}
-    local diff_active = {}
 
     for i, v in ipairs(cpu_lines) do
         -- Calculate totals
-        total_new[i]  = 0
+        local total_new = 0
         for j = 1, #v do
-            total_new[i] = total_new[i] + v[j]
+            total_new = total_new + v[j]
         end
-        active_new[i] = v[1] + v[2] + v[3]
+        local active_new = total_new - (v[4] + v[5])
 
         -- Calculate percentage
-        diff_total[i]  = total_new[i]  - cpu_total[i]
-        diff_active[i] = active_new[i] - cpu_active[i]
-        cpu_usage[i]   = math.floor(diff_active[i] / diff_total[i] * 100)
+        local diff_total  = total_new - cpu_total[i]
+        local diff_active = active_new - cpu_active[i]
+
+        if diff_total == 0 then diff_total = 1E-6 end
+        cpu_usage[i]      = math.floor((diff_active / diff_total) * 100)
 
         -- Store totals
-        cpu_total[i]   = total_new[i]
-        cpu_active[i]  = active_new[i]
+        cpu_total[i]   = total_new
+        cpu_active[i]  = active_new
     end
 
     return cpu_usage
