@@ -24,6 +24,13 @@ local bin     = home .. "/.config/awesome/bin/"
 local exec    = awful.util.spawn
 local sexec   = awful.util.spawn_with_shell
 
+if NOTIFYSCREEN then
+	naughty.config.default_preset.screen = NOTIFYSCREEN
+end
+if NOTIFYPOS then
+	naughty.config.default_preset.position = NOTIFYPOS
+end
+
 -- Beautiful theme
 beautiful.init(home .. "/.config/awesome/zenburn.lua")
 
