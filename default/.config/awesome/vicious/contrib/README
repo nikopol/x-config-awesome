@@ -4,7 +4,17 @@ Contrib widgets are extra widgets you can use. Some are for less
 common hardware, and other were contributed by Vicious users. The
 contrib directory also holds widget types that were obsoleted or
 rewritten. Contrib widgets will not be imported by init unless you
-explicitly enable it.
+explicitly enable it, or load them in your rc.lua.
+
+
+Usage
+-----
+To use contrib widgets uncomment the line that loads them in
+init.lua. Or you can load them in your rc.lua after you require
+Vicious:
+
+  local vicious = require("vicious")
+  vicious.contrib = require("vicious.contrib")
 
 
 Widget types
@@ -17,6 +27,14 @@ widgets like PulseAudio have emerged that are different. These widgets
 could also depend on Lua libraries that are not distributed with the
 core Lua distribution. Ease of installation and use does not
 necessarily have to apply to contributed widgets.
+
+vicious.contrib.ac
+  - provide status about the power supply (AC)
+  - takes the AC device as an argument, i.e "AC" or "ACAD"
+  - the device is linked under /sys/class/power_supply/ and should
+    have a file called "online"
+  - if AC is connected, $1 returns "On", if not it returns "Off",
+    if AC doesn't exist, $1 is "N/A"
 
 vicious.contrib.batacpi
   -
@@ -74,6 +92,12 @@ vicious.contrib.rss
 
 vicious.contrib.sensors
   -
+
+vicious.contrib.wpa
+- provides information about the wifi status
+- requires 'wpa_cli' from wpa_supplicant
+- takes the interface as an argument, i.e "wlan0" or "wlan1"
+- returns a table with string keys: {ssid}, {qual}, {ip}, {bssid}
 
 
 Usage examples

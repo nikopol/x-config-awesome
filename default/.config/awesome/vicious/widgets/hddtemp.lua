@@ -12,7 +12,8 @@ local string = { gmatch = string.gmatch }
 
 
 -- Hddtemp: provides hard drive temperatures using the hddtemp daemon
-module("vicious.widgets.hddtemp")
+-- vicious.widgets.hddtemp
+local hddtemp = {}
 
 
 -- {{{ HDD Temperature widget type
@@ -21,7 +22,7 @@ local function worker(format, warg)
     if warg == nil then warg = 7634 end
 
     local hdd_temp = {} -- Get info from the hddtemp daemon
-    local f = io.popen("curl --connect-timeout 1 -fsm 3 telnet://127.0.0.1:"..warg)
+    local f = io.popen("echo | curl --connect-timeout 1 -fsm 3 telnet://127.0.0.1:"..warg)
 
     for line in f:lines() do
         for d, t in string.gmatch(line, "|([%/%a%d]+)|.-|([%d]+)|[CF]+|") do
@@ -34,4 +35,4 @@ local function worker(format, warg)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+return setmetatable(hddtemp, { __call = function(_, ...) return worker(...) end })

@@ -23,7 +23,8 @@ local string = {
 
 
 -- Helpers: provides helper functions for vicious widgets
-module("vicious.helpers")
+-- vicious.helpers
+local helpers = {}
 
 
 -- {{{ Variable definitions
@@ -32,14 +33,13 @@ local scroller = {}
 
 -- {{{ Helper functions
 -- {{{ Loader of vicious modules
-function wrequire(table,  key)
-    local module = rawget(table,  key)
+function helpers.wrequire(table, key)
+    local module = rawget(table, key)
     return module or require(table._NAME .. "." .. key)
 end
--- }}}
 
 -- {{{ Expose path as a Lua table
-function pathtotable(dir)
+function helpers.pathtotable(dir)
     return setmetatable({ _path = dir },
         { __index = function(table, index)
             local path = table._path .. '/' .. index
@@ -61,7 +61,7 @@ end
 -- }}}
 
 -- {{{ Format a string with args
-function format(format, args)
+function helpers.format(format, args)
     for var, val in pairs(args) do
         format = format:gsub("$" .. (tonumber(var) and var or
             var:gsub("[-+?*]", function(i) return "%"..i end)),
@@ -73,7 +73,7 @@ end
 -- }}}
 
 -- {{{ Format units to one decimal point
-function uformat(array, key, value, unit)
+function helpers.uformat(array, key, value, unit)
     for u, v in pairs(unit) do
         array["{"..key.."_"..u.."}"] = string.format("%.1f", value/v)
     end
@@ -83,7 +83,7 @@ end
 -- }}}
 
 -- {{{ Escape a string
-function escape(text)
+function helpers.escape(text)
     local xml_entities = {
         ["\""] = "&quot;",
         ["&"]  = "&amp;",
@@ -97,7 +97,7 @@ end
 -- }}}
 
 -- {{{ Capitalize a string
-function capitalize(text)
+function helpers.capitalize(text)
     return text and text:gsub("([%w])([%w]*)", function(c, s)
         return string.upper(c) .. s
     end)
@@ -105,7 +105,7 @@ end
 -- }}}
 
 -- {{{ Truncate a string
-function truncate(text, maxlen)
+function helpers.truncate(text, maxlen)
     local txtlen = text:len()
 
     if txtlen > maxlen then
@@ -117,7 +117,7 @@ end
 -- }}}
 
 -- {{{ Scroll through a string
-function scroll(text, maxlen, widget)
+function helpers.scroll(text, maxlen, widget)
     if not scroller[widget] then
         scroller[widget] = { i = 1, d = true }
     end
@@ -146,4 +146,7 @@ function scroll(text, maxlen, widget)
     return text
 end
 -- }}}
+
+return helpers
+
 -- }}}

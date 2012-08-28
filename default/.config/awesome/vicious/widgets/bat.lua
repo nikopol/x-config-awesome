@@ -16,7 +16,8 @@ local math = {
 
 
 -- Bat: provides state, charge, and remaining time for a requested battery
-module("vicious.widgets.bat")
+-- vicious.widgets.bat
+local bat = {}
 
 
 -- {{{ Battery widget type
@@ -56,16 +57,17 @@ local function worker(format, warg)
 
     -- Get charge information
     if battery.current_now then
-        rate = battery.current_now
+        rate = tonumber(battery.current_now)
     elseif battery.power_now then
-        rate = battery.power_now
+        rate = tonumber(battery.power_now)
     else
         return {state, percent, "N/A"}
     end
 
     -- Calculate remaining (charging or discharging) time
     local time = "N/A"
-    if tonumber(rate) then
+
+    if rate ~= nil and rate ~= 0 then
         if state == "+" then
             timeleft = (tonumber(capacity) - tonumber(remaining)) / tonumber(rate)
         elseif state == "-" then
@@ -73,8 +75,11 @@ local function worker(format, warg)
         else
             return {state, percent, time}
         end
-        local hoursleft = math.floor(timeleft)
+
+        -- Calculate time
+        local hoursleft   = math.floor(timeleft)
         local minutesleft = math.floor((timeleft - hoursleft) * 60 )
+
         time = string.format("%02d:%02d", hoursleft, minutesleft)
     end
 
@@ -82,4 +87,4 @@ local function worker(format, warg)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+return setmetatable(bat, { __call = function(_, ...) return worker(...) end })
