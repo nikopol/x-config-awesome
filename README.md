@@ -6,7 +6,7 @@ vicious widget library included for a painless install
 
 pretty easy to configure (see below)
 
-![systray screenshot](systray.png)
+![systray screenshot](https://github.com/nikopol/x-config-awesome/blob/master/systray.png?raw=true)
 
 
 "give a try" install
