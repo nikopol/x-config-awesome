@@ -12,10 +12,11 @@ require("awful")
 require("awful.rules")
 require("awful.autofocus")
 -- User libraries
-require("vicious")
+local vicious = require("vicious")
 require("scratch")
 require("naughty")
 require("config")
+--require("column")
 -- }}}
 
 -- {{{ Variable definitions
@@ -41,7 +42,7 @@ layouts = {
 	awful.layout.suit.fair,        -- 3
 	awful.layout.suit.max,         -- 4
 	awful.layout.suit.magnifier,   -- 5
-	awful.layout.suit.floating     -- 6
+	awful.layout.suit.column       -- 6
 }
 -- }}}
 
@@ -52,7 +53,7 @@ tags = {
 }
 for s = 1, screen.count() do
 	tags[s] = awful.tag(tags.names, s, tags.layout)
-	awful.tag.setproperty(tags[s][6], "mwfact", 0.20)
+	awful.tag.setproperty(tags[s][6], "mwfact", 0.50)
 	awful.tag.setproperty(tags[s][8], "hide",   true)
 end
 -- }}}
@@ -176,7 +177,7 @@ if MOUNTS then
 		end
 		-- Register widget
 		vicious.register(
-			fs[i], vicious.widgets.fs, 
+			fs[i], vicious.widgets.fs,
 			function (widget, args)
 				fstip[i]:set_text(
 					"<span color=\""..beautiful.fg_normal.."\"><b>"..MOUNTS[i].."</b></span>\n"..
@@ -227,7 +228,7 @@ end
 
 -- {{{ GMAIL
 if GMAIL then
-	-- echo "machine mail.google.com login yourlogin@gmail.com password yourpassword" > ~/.netrc 
+	-- echo "machine mail.google.com login yourlogin@gmail.com password yourpassword" > ~/.netrc
 	mailicon = widget({ type = "imagebox" })
 	mailicon.image = image(beautiful.widget_mail)
 	-- Initialize widget
@@ -298,8 +299,8 @@ if CHAUDIO then
 	-- Enable caching
 	vicious.cache(vicious.widgets.volume)
 	-- Register widgets
-	vicious.register(volbar,    vicious.widgets.volume,  "$1",  2, CHAUDIO)
-	vicious.register(volwidget, vicious.widgets.volume, " $1%", 2, CHAUDIO)
+	vicious.register(volbar,    vicious.widgets.volume,  "$1",  1, CHAUDIO)
+	vicious.register(volwidget, vicious.widgets.volume, " $1%", 1, CHAUDIO)
 	-- Register buttons
 	volbar.widget:buttons(awful.util.table.join(
 		awful.button({ }, 1, function () exec(TERM .. " -e alsamixer") end),
@@ -484,24 +485,26 @@ globalkeys = awful.util.table.join(
 	awful.key({ MODKEY }, "w", function () exec(BROWSER) end),
 	awful.key({ MODKEY }, "Return", function () exec(TERM) end),
 	awful.key({ MODKEY, "Shift" }, "l", function () exec(LOCKER) end),
+	awful.key({}, "XF86PowerOff", function () exec(LOCKER) end),
+	awful.key({}, "XF86Sleep", function () exec(LOCKER) end),
 	-- }}}
 
-	-- {{{ Multimedia keys
+	-- {{{ Audio keys
+	awful.key({}, "XF86AudioPlay", function () exec("mocp --toggle-pause", false) end),
 	awful.key({ MODKEY, "Shift" }, "m", function () exec("amixer -q set Master toggle", false) end),
+	awful.key({}, "XF86AudioMute", function () exec("amixer -q set Master toggle", false) end),
 	awful.key({ MODKEY, "Shift" }, "Down", function () exec("amixer -q set " .. CHAUDIO .. " 2dB-", false) end),
+	awful.key({}, "XF86AudioLowerVolume", function () exec("amixer -q set " .. CHAUDIO .. " 2dB-", false) end),
 	awful.key({ MODKEY, "Shift" }, "Up", function () exec("amixer -q set " .. CHAUDIO .. " 2dB+", false)  end),
-	--awful.key({}, "#232", function () exec(bin .. "plight.py -s") end),
-	--awful.key({}, "#233", function () exec(bin .. "plight.py -s") end),
-	--awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate") end),
-	--awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend")   end),
-	--awful.key({}, "#225", function () exec(bin .. "pypres.py") end),
-	--awful.key({}, "#157", function () if boosk then osk()
-	--	else boosk, osk = pcall(require, "osk") end
-	--end),
+	awful.key({}, "XF86AudioRaiseVolume", function () exec("amixer -q set " .. CHAUDIO .. " 2dB+", false) end),
+	awful.key({ MODKEY, "Shift" }, "Left", function () exec("mocp --previous", false) end),
+	awful.key({}, "XF86AudioPrev", function () exec("mocp --previous", false) end),
+	awful.key({ MODKEY, "Shift" }, "Right", function () exec("mocp --next", false) end),
+	awful.key({}, "XF86AudioNext", function () exec("mocp --next", false) end),
 	-- }}}
 
 	-- {{{ Prompt menus
-	awful.key({ MODKEY }, "p", function ()
+	awful.key({ MODKEY }, "F2", function ()
 		awful.prompt.run({ prompt = "Run: " }, promptbox[mouse.screen].widget,
 			function (...) promptbox[mouse.screen].text = exec(unpack(arg), false) end,
 			awful.completion.shell, awful.util.getdir("cache") .. "/history")
@@ -532,8 +535,8 @@ globalkeys = awful.util.table.join(
 	-- }}}
 
 	-- {{{ Tag browsing
-	awful.key({ ALTKEY }, "n",   awful.tag.viewnext),
-	awful.key({ ALTKEY }, "p",   awful.tag.viewprev),
+	awful.key({ MODKEY }, "n",   awful.tag.viewnext),
+	awful.key({ MODKEY }, "p",   awful.tag.viewprev),
 	awful.key({ ALTKEY }, "Tab", awful.tag.history.restore),
 	-- }}}
 
@@ -660,6 +663,7 @@ awful.rules.rules = {
 	{ rule = { class = "Geeqie" },      properties = { floating = true } },
 	{ rule = { class = "ROX-Filer" },   properties = { floating = true } },
 	{ rule = { class = "Pinentry.*" },  properties = { floating = true } },
+	--{ rule = { class = "urxvt" },  properties = { opacity = 0.8 } },
 }
 -- }}}
 
