@@ -9,18 +9,18 @@ ALTKEY   = "Mod1"
 MODKEY   = "Mod4"
 TERM     = "urxvt"
 BROWSER  = "chromium"
+EDITOR   = TERM .. " -e vim"
 LOCKER   = "slock"
 CHAUDIO  = "Master"          --alsa PCM/Master
 NETINT   = "eth0"
-SCREENINFO = 0               --screen for system tray & info 0=all
+SCREENINFO = 1               --screen for system tray & info 0=all
 NOTIFYSCREEN = 1             --screen for notification
 NOTIFYPOS = "top_right"      --position for notification: top_left,top_right,bottom_left,bottom_right
 
 -- optionals (comment it to remove it) --
 
-GMAIL    = 1
+--GMAIL    = 1
 --SYSBAT   = "BAT1"          -- ls /sys/class/power_supply/
 --SYSTEMP  = "thermal_zone0" -- ls /sys/class/thermal/
-FILER    = "pcmanfm"
-MOUNTS   = { "/home", "/" }
---ORGPATHS = { "~/.org/computers.org", "~/.org/index.org", "~/.org/personal.org" }
+--FILER    = "pcmanfm"
+--MOUNTS   = { "/", "/home" }

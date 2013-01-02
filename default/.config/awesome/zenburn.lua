@@ -4,12 +4,15 @@
 --    License:  GNU GPL v2   --
 -------------------------------
 
+-- {{{ Libraries
+local awful     = require("awful")
+-- }}}
+
 
 -- {{{ Main
 theme = {}
 theme.confdir       = awful.util.getdir("config")
---theme.wallpaper_cmd = { "/usr/bin/nitrogen --restore" }
---theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/zenburn/zenburn-background.png" }
+--theme.wallpaper = theme.confdir .. "/wallpaper.png"
 -- }}}
 
 
@@ -47,6 +50,7 @@ theme.fg_netup_widget  = "#7F9F7F"
 theme.fg_netdn_widget  = theme.fg_urgent
 theme.bg_widget        = theme.bg_normal
 theme.border_widget    = theme.bg_normal
+theme.gradient         = "linear:0,0:0,16:0,"..theme.fg_end_widget..":0.5,"..theme.fg_center_widget..":1,"..theme.fg_widget
 -- }}}
 
 -- {{{ Mouse finder
@@ -77,10 +81,11 @@ theme.taglist_squares_unsel = theme.confdir .. "/icons/taglist/squareza.png"
 --theme.taglist_squares_resize = "false"
 -- }}}
 
--- {{{ Misc icons
---theme.awesome_icon           = theme.confdir .. "/icons/awesome.png"
---theme.menu_submenu_icon      = "/usr/share/awesome/themes/default/submenu.png"
---theme.tasklist_floating_icon = "/usr/share/awesome/themes/default/tasklist/floatingw.png"
+-- {{{ Menu
+theme.awesome_icon      = theme.confdir .. "/icons/awesome16.png"
+theme.menu_submenu_icon = theme.confdir .. "/icons/submenu.png"
+theme.menu_height       = 15
+theme.menu_width        = 100
 -- }}}
 
 -- {{{ Layout icons
