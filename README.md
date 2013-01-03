@@ -8,7 +8,7 @@ pretty easy to configure (see below)
 
 ![systray screenshot](https://github.com/nikopol/x-config-awesome/blob/master/systray.png?raw=true "sample systray screenshot")
 
-"give a try" install
+"give it a try" install
 --------------------
 from your clone directory
 
