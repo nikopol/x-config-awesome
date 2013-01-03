@@ -315,10 +315,10 @@ datetip = awful.tooltip({
   timeout = 1800,
   timer_function = function ()
     cal = ""
-    cmd = io.popen("cal -3")
-    for line in cmd:lines() do
-      cal = cal .. line .. "\n"
-    end
+    -- cmd = io.popen("cal -3")
+    -- for line in cmd:lines() do
+    --   cal = cal .. line .. "\n"
+    -- end
     return cal
   end
 })

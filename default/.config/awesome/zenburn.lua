@@ -5,16 +5,15 @@
 -------------------------------
 
 -- {{{ Libraries
-local awful     = require("awful")
+local awful = require("awful")
 -- }}}
-
 
 -- {{{ Main
 theme = {}
-theme.confdir       = awful.util.getdir("config")
+theme.confdir = awful.util.getdir("config")
 --theme.wallpaper = theme.confdir .. "/wallpaper.png"
+theme.bg  = "#000000"
 -- }}}
-
 
 -- {{{ Styles
 theme.font      = "Monaco 9"
