@@ -144,18 +144,15 @@ end
 cpugraph:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec(TERM .. " -e htop") end)
 ))
-cputip = awful.tooltip({
-   objects = { cpuicon, cpugraph },
-   timeout = 1,
-   timer_function = function ()
-      top = ""
-      cmd = io.popen("ps -aux --cols 110 --sort=-%cpu | head -6")
-      for line in cmd:lines() do
-         top = top .. line:gsub("%W","_") .. "\n"
-      end
-      return top
-   end
-})
+-- cputip = awful.tooltip({
+--    objects = { cpuicon, cpugraph },
+--    timeout = 1,
+--    timer_function = function ()
+--       cmd = io.popen("ps -aux --cols 110 --sort=-%cpu | head -6")
+--       top = cmd:read("*a")
+--       return string.gsub(top,"\n$","")
+--    end
+-- })
 
 -- Battery state
 if SYSBAT then
@@ -316,12 +313,9 @@ datetip = awful.tooltip({
    objects = { datewidget, dateicon },
    timeout = 1800,
    timer_function = function ()
-      cal = ""
       cmd = io.popen("cal -3")
-      for line in cmd:lines() do
-         cal = cal .. line .. "\n"
-      end
-      return cal
+      cal = cmd:read("*a")
+      return string.gsub(cal,"\n$","")
    end
 })
 vicious.register(datewidget, vicious.widgets.date, "%d/%m %R", 60)
