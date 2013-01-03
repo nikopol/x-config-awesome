@@ -132,7 +132,7 @@ separator:set_image(beautiful.widget_sep)
 -- CPU usage and temperature
 cpuicon = wibox.widget.imagebox()
 cpuicon:set_image(beautiful.widget_cpu)
-cpugraph  = awful.widget.graph()
+cpugraph = awful.widget.graph()
 cpugraph:set_width(40):set_height(14)
 cpugraph:set_background_color(beautiful.fg_off_widget)
 cpugraph:set_color(beautiful.gradient)
@@ -159,6 +159,7 @@ cputip = awful.tooltip({
 
 -- Battery state
 if SYSBAT then
+   vicious.cache(vicious.widgets.bat)
    baticon = wibox.widget.imagebox()
    baticon:set_image(beautiful.widget_bat)
    batwidget = wibox.widget.textbox()
@@ -172,6 +173,7 @@ if SYSBAT then
 end
 
 -- Memory usage
+vicious.cache(vicious.widgets.mem)
 memicon = wibox.widget.imagebox()
 memicon:set_image(beautiful.widget_mem)
 memwidget = wibox.widget.textbox()
@@ -227,13 +229,14 @@ if MOUNTS then
             )
             return args["{"..MOUNTS[i].." used_p}"];
          end,
-         60
+         120
       )
    end
 end
 
 -- Network usage
 if NETINT then
+   vicious.cache(vicious.widgets.net)
    dnicon = wibox.widget.imagebox()
    dnicon:set_image(beautiful.widget_net)
    dngraph = awful.widget.graph()
@@ -268,7 +271,6 @@ if GMAIL then
    mailwidget.width = 20
    mailwidget.align = "center"
    mailtip = awful.tooltip({ objects = { mailwidget } })
-   vicious.cache(vicious.widgets.gmail)
    vicious.register(
       mailwidget, vicious.widgets.gmail,
       function (widget, args)
@@ -284,6 +286,7 @@ end
 
 -- Volume level
 if CHAUDIO then
+   vicious.cache(vicious.widgets.volume)
    volicon   = wibox.widget.imagebox()
    volicon:set_image(beautiful.widget_vol)
    volbar    = awful.widget.progressbar()
@@ -292,7 +295,6 @@ if CHAUDIO then
    volbar:set_height(14):set_width(8):set_ticks_size(2)
    volbar:set_background_color(beautiful.fg_off_widget)
    volbar:set_color(beautiful.gradient)
-   vicious.cache(vicious.widgets.volume)
    vicious.register(volbar,    vicious.widgets.volume,  "$1",  2, CHAUDIO)
    vicious.register(volwidget, vicious.widgets.volume, " $1%", 2, CHAUDIO)
    volbar:buttons(awful.util.table.join(
