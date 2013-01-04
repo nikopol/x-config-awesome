@@ -144,15 +144,18 @@ end
 cpugraph:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec(TERM .. " -e htop") end)
 ))
--- cputip = awful.tooltip({
---    objects = { cpuicon, cpugraph },
---    timeout = 1,
---    timer_function = function ()
---       cmd = io.popen("ps -aux --cols 110 --sort=-%cpu | head -6")
---       top = cmd:read("*a")
---       return string.gsub(top,"\n$","")
---    end
--- })
+cputip = awful.tooltip({
+   objects = { cpuicon, cpugraph },
+   timeout = 1,
+   timer_function = function ()
+      cmd = io.popen("ps -aux --cols 110 --sort=-%cpu | head -6")
+      top = cmd:read("*a")
+      return (
+         "<span color=\""..beautiful.fg_normal.."\">"..top:match("^([^\n]+)").."</span>\n"..
+         awful.util.escape(top:gsub("^([^\n]+)\n",""):gsub("\n$",""))
+      )
+   end
+})
 
 -- Battery state
 if SYSBAT then
@@ -160,6 +163,10 @@ if SYSBAT then
    baticon = wibox.widget.imagebox()
    baticon:set_image(beautiful.widget_bat)
    batwidget = wibox.widget.textbox()
+   batwidget.fit = function(box,w,h)
+      local w,h = wibox.widget.textbox.fit(box,w,h)
+      return math.max(32,w),h
+   end
    vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 60, SYSBAT)
    batbar = awful.widget.progressbar()
    batbar:set_vertical(true):set_ticks(true)
@@ -174,13 +181,18 @@ vicious.cache(vicious.widgets.mem)
 memicon = wibox.widget.imagebox()
 memicon:set_image(beautiful.widget_mem)
 memwidget = wibox.widget.textbox()
+memwidget:set_align('center')
+memwidget.fit = function(box,w,h)
+   local w,h = wibox.widget.textbox.fit(box,w,h)
+   return math.max(35,w),h
+end
 membar = awful.widget.progressbar()
 membar:set_vertical(true):set_ticks(true)
 membar:set_height(14):set_width(8):set_ticks_size(2)
 membar:set_background_color(beautiful.fg_off_widget)
 membar:set_color(beautiful.gradient)
 memtip = awful.tooltip({ objects = { memwidget, memicon, membar }})
-vicious.register(membar, vicious.widgets.mem, "$1", 13)
+vicious.register(membar, vicious.widgets.mem, "$1", 1)
 vicious.register(
    memwidget, vicious.widgets.mem,
    function (widget,args)
@@ -192,7 +204,7 @@ vicious.register(
       )
       return args[1].."%"
    end,
-   13
+   1
 )
 
 -- File system usage
@@ -242,7 +254,10 @@ if NETINT then
    dngraph:set_background_color(beautiful.fg_off_widget)
    dngraph:set_color(beautiful.fg_netdn_widget)
    dntext = wibox.widget.textbox()
-   dntext.width = 55
+   dntext.fit = function(box,w,h)
+      local w,h = wibox.widget.textbox.fit(box,w,h)
+      return math.max(40,w),h
+   end
    dntext.align = "left"
    upicon = wibox.widget.imagebox()
    upicon:set_image(beautiful.widget_netup)
@@ -252,7 +267,11 @@ if NETINT then
    upgraph:set_background_color(beautiful.fg_off_widget)
    upgraph:set_color(beautiful.fg_netup_widget)
    uptext = wibox.widget.textbox()
-   uptext.width = 55
+   uptext:set_align('right')
+   uptext.fit = function(box,w,h)
+      local w,h = wibox.widget.textbox.fit(box,w,h)
+      return math.max(40,w),h
+   end
    uptext.align = "right"
    vicious.register(uptext, vicious.widgets.net, '<span color="'..beautiful.fg_netup_widget..'">${'..NETINT..' up_kb}</span>', 2)
    vicious.register(dntext, vicious.widgets.net, '<span color="'..beautiful.fg_netdn_widget..'">${'..NETINT..' down_kb}</span>', 2)
@@ -265,8 +284,11 @@ if GMAIL then
    mailicon = wibox.widget.imagebox()
    mailicon:set_image(beautiful.widget_mail)
    mailwidget = wibox.widget.textbox()
-   mailwidget.width = 20
-   mailwidget.align = "center"
+   mailwidget.fit = function(box,w,h)
+      local w,h = wibox.widget.textbox.fit(box,w,h)
+      return math.max(20,w),h
+   end
+   mailwidget:set_align('center')
    mailtip = awful.tooltip({ objects = { mailwidget } })
    vicious.register(
       mailwidget, vicious.widgets.gmail,
@@ -288,6 +310,11 @@ if CHAUDIO then
    volicon:set_image(beautiful.widget_vol)
    volbar    = awful.widget.progressbar()
    volwidget = wibox.widget.textbox()
+   volwidget:set_align('center')
+   volwidget.fit = function(box,w,h)
+      local w,h = wibox.widget.textbox.fit(box,w,h)
+      return math.max(35,w),h
+   end
    volbar:set_vertical(true):set_ticks(true)
    volbar:set_height(14):set_width(8):set_ticks_size(2)
    volbar:set_background_color(beautiful.fg_off_widget)
@@ -315,7 +342,10 @@ datetip = awful.tooltip({
    timer_function = function ()
       cmd = io.popen("cal -3")
       cal = cmd:read("*a")
-      return string.gsub(cal,"\n$","")
+      return (
+         "<span color=\""..beautiful.fg_normal.."\">"..cal:match("^([^\n]+\n[^\n]+)").."</span>\n"..
+         awful.util.escape(cal:gsub("^([^\n]+\n[^\n]+\n)",""):gsub("\n$",""))
+      )
    end
 })
 vicious.register(datewidget, vicious.widgets.date, "%d/%m %R", 60)
@@ -656,8 +686,8 @@ awful.rules.rules = {
                      focus = awful.client.focus.filter,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-   { rule = { class = "MPlayer" },
-      properties = { floating = true } },
+   -- { rule = { class = "MPlayer" },
+   --    properties = { floating = true } },
    { rule = { class = "pinentry" },
       properties = { floating = true } },
    { rule = { class = "gimp" },
