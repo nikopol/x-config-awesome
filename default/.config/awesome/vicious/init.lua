@@ -16,6 +16,7 @@ local table = {
     insert  = table.insert,
     remove  = table.remove
 }
+
 local helpers = require("vicious.helpers")
 
 -- Vicious: widgets for the awesome window manager

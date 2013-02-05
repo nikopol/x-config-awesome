@@ -66,16 +66,16 @@ beautiful.init(home .. "/.config/awesome/zenburn.lua")
 local layouts = {
    -- awful.layout.suit.floating,
    awful.layout.suit.tile,
+   awful.layout.suit.max,
    -- awful.layout.suit.tile.left,
    awful.layout.suit.tile.bottom,
    -- awful.layout.suit.tile.top,
    awful.layout.suit.fair,
    -- awful.layout.suit.fair.horizontal,
    -- awful.layout.suit.spiral,
-   -- awful.layout.suit.spiral.dwindle,
-   awful.layout.suit.max,
+   awful.layout.suit.spiral.dwindle
    -- awful.layout.suit.max.fullscreen,
-   awful.layout.suit.magnifier
+   --awful.layout.suit.magnifier
 }
 -- }}}
 
@@ -678,24 +678,43 @@ root.keys(globalkeys)
 -- }}}
 
 -- {{{ Rules
-awful.rules.rules = {
+--awful.rules.rules = {
    -- All clients will match this rule.
-   { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
-                     focus = awful.client.focus.filter,
-                     keys = clientkeys,
-                     buttons = clientbuttons } },
+--   { rule = { },
+--      properties = { border_width = beautiful.border_width,
+--                     border_color = beautiful.border_normal,
+--                     focus = awful.client.focus.filter,
+--                     keys = clientkeys,
+--                     buttons = clientbuttons } },
    -- { rule = { class = "MPlayer" },
    --    properties = { floating = true } },
-   { rule = { class = "pinentry" },
-      properties = { floating = true } },
-   { rule = { class = "gimp" },
-      properties = { floating = true } },
+--   { rule = { class = "pinentry" }, properties = { floating = true } },
+--   { rule = { class = "gimp" }, properties = { floating = true } },
    -- Set Firefox to always map on tags number 2 of screen 1.
    -- { rule = { class = "Firefox" },
    --   properties = { tag = tags[1][2] } },
+--}
+
+awful.rules.rules = {
+   { rule = { }, properties = {
+      focus = true,
+      size_hints_honor = false,
+      keys = clientkeys,
+      buttons = clientbuttons,
+      border_width = beautiful.border_width,
+      border_color = beautiful.border_normal
+   }},
+   --{ rule = { class = "Firefox",  instance = "Navigator" }, properties = { tag = tags[screen.count()][3] } },
+   { rule = { class = "Xmessage", instance = "xmessage" }, properties = { floating = true }, callback = awful.titlebar.add  },
+   { rule = { instance = "firefox-bin" }, properties = { floating = true }, callback = awful.titlebar.add  },
+   { rule = { name  = "Alpine" },      properties = { tag = tags[1][4]} },
+   { rule = { class = "Ark" },         properties = { floating = true } },
+   { rule = { class = "Geeqie" },      properties = { floating = true } },
+   { rule = { class = "ROX-Filer" },   properties = { floating = true } },
+   { rule = { class = "Pinentry.*" },  properties = { floating = true } },
+   --{ rule = { class = "urxvt" },  properties = { opacity = 0.8 } },
 }
+
 -- }}}
 
 -- {{{ Signals
