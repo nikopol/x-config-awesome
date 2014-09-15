@@ -19,7 +19,6 @@ local naughty   = require("naughty")
 local menubar   = require("menubar")
 -- User libraries
 local vicious   = require("vicious")
-local scratch   = require("scratch")
                   require("config")
 
 -- {{{ Error handling
@@ -196,7 +195,7 @@ vicious.register(membar, vicious.widgets.mem, "$1", 1)
 vicious.register(
    memwidget, vicious.widgets.mem,
    function (widget,args)
-      memtip:set_text(
+      memtip:set_markup(
          "Free <span color=\""..beautiful.fg_widget.."\">"..args[4].."</span>KB\n"..
          "Used <span color=\""..beautiful.fg_widget.."\">"..args[2].."</span>KB\n"..
          "Size <span color=\""..beautiful.fg_widget.."\">"..args[3].."</span>KB\n"..
@@ -230,7 +229,7 @@ if MOUNTS then
       vicious.register(
          fs[i], vicious.widgets.fs,
          function (widget, args)
-            fstip[i]:set_text(
+            fstip[i]:set_markup(
                "<span color=\""..beautiful.fg_normal.."\"><b>"..MOUNTS[i].."</b></span>\n"..
                "Free <span color=\""..beautiful.fg_widget.."\">"..args["{"..MOUNTS[i].." avail_gb}"].."</span>GB\n"..
                "Used <span color=\""..beautiful.fg_widget.."\">"..args["{"..MOUNTS[i].." used_gb}"].."</span>GB\n"..
@@ -578,18 +577,30 @@ globalkeys = awful.util.table.join(
    awful.key({                   }, "XF86PowerOff", function () exec(LOCKER) end),
    awful.key({                   }, "XF86Sleep", function () exec(LOCKER) end),
 
-   -- Audio
-   awful.key({                   }, "XF86AudioPlay", function () exec("mocp --toggle-pause", false) end),
-   awful.key({ MODKEY, "Shift"   }, "m", function () exec("amixer -q set Master toggle", false) end),
+   -- Volume
+   --awful.key({ MODKEY, "Shift"   }, "m", function () exec("amixer -q set Master toggle", false) end),
    awful.key({                   }, "XF86AudioMute", function () exec("amixer -q set Master toggle", false) end),
    awful.key({ MODKEY, "Shift"   }, "Down", function () exec("amixer -q set " .. CHAUDIO .. " 2dB-", false) end),
    awful.key({                   }, "XF86AudioLowerVolume", function () exec("amixer -q set " .. CHAUDIO .. " 2dB-", false) end),
    awful.key({ MODKEY, "Shift"   }, "Up", function () exec("amixer -q set " .. CHAUDIO .. " 2dB+", false)  end),
    awful.key({                   }, "XF86AudioRaiseVolume", function () exec("amixer -q set " .. CHAUDIO .. " 2dB+", false) end),
-   awful.key({ MODKEY, "Shift"   }, "Left", function () exec("mocp --previous", false) end),
-   awful.key({                   }, "XF86AudioPrev", function () exec("mocp --previous", false) end),
-   awful.key({ MODKEY, "Shift"   }, "Right", function () exec("mocp --next", false) end),
-   awful.key({                   }, "XF86AudioNext", function () exec("mocp --next", false) end),
+
+   -- moc
+   -- awful.key({                   }, "XF86AudioPlay", function () exec("mocp --toggle-pause", false) end),
+   -- awful.key({ MODKEY, "Shift"   }, "Left", function () exec("mocp --previous", false) end),
+   -- awful.key({                   }, "XF86AudioPrev", function () exec("mocp --previous", false) end),
+   -- awful.key({ MODKEY, "Shift"   }, "Right", function () exec("mocp --next", false) end),
+   -- awful.key({                   }, "XF86AudioNext", function () exec("mocp --next", false) end),
+
+   -- cmus
+   awful.key({                   }, "XF86AudioPlay", function () exec("cmus-pp", false) end),
+   awful.key({ MODKEY, "Shift"   }, "p", function () exec("cmus-pp", false) end),
+   awful.key({ MODKEY, "Shift"   }, "m", function () exec("cmus-pp", false) end),
+   awful.key({ MODKEY, "Shift"   }, "Left", function () exec("cmus-remote --prev", false) end),
+   awful.key({                   }, "XF86AudioPrev", function () exec("cmus-remote --prev", false) end),
+   awful.key({ MODKEY, "Shift"   }, "Right", function () exec("cmus-remote --next", false) end),
+   awful.key({                   }, "XF86AudioNext", function () exec("cmus-remote --next", false) end),
+
 
    -- Prompt
    awful.key({ MODKEY },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -603,8 +614,8 @@ globalkeys = awful.util.table.join(
       end),
    
    -- Menubar
-   awful.key({ MODKEY }, "p", function() menubar.show() end),
-   awful.key({ MODKEY }, "F2", function() menubar.show() end)
+   awful.key({ MODKEY, }, "p", function() menubar.show() end),
+   awful.key({ MODKEY, }, "F2", function() menubar.show() end)
 
 )
 
@@ -678,23 +689,6 @@ root.keys(globalkeys)
 -- }}}
 
 -- {{{ Rules
---awful.rules.rules = {
-   -- All clients will match this rule.
---   { rule = { },
---      properties = { border_width = beautiful.border_width,
---                     border_color = beautiful.border_normal,
---                     focus = awful.client.focus.filter,
---                     keys = clientkeys,
---                     buttons = clientbuttons } },
-   -- { rule = { class = "MPlayer" },
-   --    properties = { floating = true } },
---   { rule = { class = "pinentry" }, properties = { floating = true } },
---   { rule = { class = "gimp" }, properties = { floating = true } },
-   -- Set Firefox to always map on tags number 2 of screen 1.
-   -- { rule = { class = "Firefox" },
-   --   properties = { tag = tags[1][2] } },
---}
-
 awful.rules.rules = {
    { rule = { }, properties = {
       focus = true,
@@ -705,13 +699,10 @@ awful.rules.rules = {
       border_color = beautiful.border_normal
    }},
    --{ rule = { class = "Firefox",  instance = "Navigator" }, properties = { tag = tags[screen.count()][3] } },
-   { rule = { class = "Xmessage", instance = "xmessage" }, properties = { floating = true }, callback = awful.titlebar.add  },
-   { rule = { instance = "firefox-bin" }, properties = { floating = true }, callback = awful.titlebar.add  },
-   { rule = { name  = "Alpine" },      properties = { tag = tags[1][4]} },
-   { rule = { class = "Ark" },         properties = { floating = true } },
-   { rule = { class = "Geeqie" },      properties = { floating = true } },
-   { rule = { class = "ROX-Filer" },   properties = { floating = true } },
-   { rule = { class = "Pinentry.*" },  properties = { floating = true } },
+   { rule = { name = "MPlayer" }, properties = { floating = true } },
+   { rule = { name = "gimp" }, properties = { floating = true } },
+   { rule = { name = "wine" }, properties = { floating = true } },
+   { rule = { name = "Xmessage", instance = "xmessage" }, properties = { floating = true }, callback = awful.titlebar.add  },
    --{ rule = { class = "urxvt" },  properties = { opacity = 0.8 } },
 }
 
