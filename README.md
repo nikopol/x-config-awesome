@@ -1,12 +1,12 @@
 my personal awesome config
 ==========================
 
-vicious widget library included for a painless install
-(see https://github.com/nikopol/x-config-awesome.git )
-
-pretty easy to configure (see below)
-
 ![systray screenshot](https://github.com/nikopol/x-config-awesome/blob/master/systray.png?raw=true "sample systray screenshot")
+
+requirements
+------------
+awesome window manager, see http://awesome.naquadah.org/download/
+vicious library, see http://awesome.naquadah.org/wiki/Vicious
 
 "give it a try" install
 --------------------
