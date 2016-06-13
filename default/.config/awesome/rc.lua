@@ -339,11 +339,12 @@ datetip = awful.tooltip({
    objects = { datewidget, dateicon },
    timeout = 1800,
    timer_function = function ()
-      cmd = io.popen("cal -3")
+      cmd = io.popen("cal -m3 --color=always")
       cal = cmd:read("*a")
+      cal = cal:gsub("\27%[[0-9]m([0-9]+)\27%[[0-9]+m", "<span background=\""..beautiful.fg_normal.."\" weight=\"bold\" color=\""..beautiful.bg_widget.."\">%1</span>")
       return (
          "<span color=\""..beautiful.fg_normal.."\">"..cal:match("^([^\n]+\n[^\n]+)").."</span>\n"..
-         awful.util.escape(cal:gsub("^([^\n]+\n[^\n]+\n)",""):gsub("\n$",""))
+         cal:gsub("^([^\n]+\n[^\n]+\n)",""):gsub("\n$","")
       )
    end
 })
