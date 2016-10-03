@@ -339,9 +339,9 @@ datetip = awful.tooltip({
    objects = { datewidget, dateicon },
    timeout = 1800,
    timer_function = function ()
-      cmd = io.popen("cal -m3 --color=always")
+      cmd = io.popen("cal -h -A 1 -B 1")
       cal = cmd:read("*a")
-      cal = cal:gsub("\27%[[0-9]m([0-9]+)\27%[[0-9]+m", "<span background=\""..beautiful.fg_normal.."\" weight=\"bold\" color=\""..beautiful.bg_widget.."\">%1</span>")
+      --cal = cal:gsub("\95\8(\d)\95\8(\d)", "<span background=\""..beautiful.fg_normal.."\" weight=\"bold\" color=\""..beautiful.bg_widget.."\">%1%2</span>")
       return (
          "<span color=\""..beautiful.fg_normal.."\">"..cal:match("^([^\n]+\n[^\n]+)").."</span>\n"..
          cal:gsub("^([^\n]+\n[^\n]+\n)",""):gsub("\n$","")
@@ -425,12 +425,11 @@ for s = 1, screen.count() do
 
    -- Create the wibox
    mywibox[s] = awful.wibox({
-   -- position = "top", screen = s 
       screen = s,
       fg = beautiful.fg_normal,
       height = 16,
       bg = beautiful.bg_normal,
-      position = "top",
+      position = STATUSBARPOS,
       border_color = beautiful.bg_normal,
       border_width = beautiful.border_width
    })
@@ -579,29 +578,20 @@ globalkeys = awful.util.table.join(
    awful.key({                   }, "XF86Sleep", function () exec(LOCKER) end),
 
    -- Volume
-   --awful.key({ MODKEY, "Shift"   }, "m", function () exec("amixer -q set Master toggle", false) end),
+   awful.key({ MODKEY, "Shift"   }, "m", function () exec(MUSICTOGGLE, false) end),
    awful.key({                   }, "XF86AudioMute", function () exec("amixer -q set Master toggle", false) end),
    awful.key({ MODKEY, "Shift"   }, "Down", function () exec("amixer -q set " .. CHAUDIO .. " 2dB-", false) end),
    awful.key({                   }, "XF86AudioLowerVolume", function () exec("amixer -q set " .. CHAUDIO .. " 2dB-", false) end),
    awful.key({ MODKEY, "Shift"   }, "Up", function () exec("amixer -q set " .. CHAUDIO .. " 2dB+", false)  end),
    awful.key({                   }, "XF86AudioRaiseVolume", function () exec("amixer -q set " .. CHAUDIO .. " 2dB+", false) end),
 
-   -- moc
-   -- awful.key({                   }, "XF86AudioPlay", function () exec("mocp --toggle-pause", false) end),
-   -- awful.key({ MODKEY, "Shift"   }, "Left", function () exec("mocp --previous", false) end),
-   -- awful.key({                   }, "XF86AudioPrev", function () exec("mocp --previous", false) end),
-   -- awful.key({ MODKEY, "Shift"   }, "Right", function () exec("mocp --next", false) end),
-   -- awful.key({                   }, "XF86AudioNext", function () exec("mocp --next", false) end),
-
-   -- cmus
-   awful.key({                   }, "XF86AudioPlay", function () exec("cmus-pp", false) end),
-   awful.key({ MODKEY, "Shift"   }, "p", function () exec("cmus-pp", false) end),
-   awful.key({ MODKEY, "Shift"   }, "m", function () exec("cmus-pp", false) end),
-   awful.key({ MODKEY, "Shift"   }, "Left", function () exec("cmus-remote --prev", false) end),
-   awful.key({                   }, "XF86AudioPrev", function () exec("cmus-remote --prev", false) end),
-   awful.key({ MODKEY, "Shift"   }, "Right", function () exec("cmus-remote --next", false) end),
-   awful.key({                   }, "XF86AudioNext", function () exec("cmus-remote --next", false) end),
-
+   -- Music player
+   awful.key({                   }, "XF86AudioPlay", function () exec(MUSICTOGGLE, false) end),
+   awful.key({ MODKEY, "Shift"   }, "p", function () exec(MUSICTOGGLE, false) end),
+   awful.key({ MODKEY, "Shift"   }, "Left", function () exec(MUSICPREV, false) end),
+   awful.key({                   }, "XF86AudioPrev", function () exec(MUSICPREV, false) end),
+   awful.key({ MODKEY, "Shift"   }, "Right", function () exec(MUSICNEXT, false) end),
+   awful.key({                   }, "XF86AudioNext", function () exec(MUSICNEXT, false) end),
 
    -- Prompt
    awful.key({ MODKEY },            "r",     function () mypromptbox[mouse.screen]:run() end),
