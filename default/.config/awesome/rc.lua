@@ -51,7 +51,6 @@ end
 
 -- {{{ Variable definitions
 local home    = os.getenv("HOME")
-local bin     = home .. "/.config/awesome/bin/"
 local exec    = awful.util.spawn
 local sexec   = awful.util.spawn_with_shell
 
@@ -143,7 +142,7 @@ end
 cpugraph:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec(TERM .. " -e htop") end)
 ))
-cputip = awful.tooltip({
+awful.tooltip({
    objects = { cpuicon, cpugraph },
    timeout = 1,
    timer_function = function ()
@@ -172,7 +171,24 @@ if SYSBAT then
    batbar:set_height(14):set_width(8):set_ticks_size(2)
    batbar:set_background_color(beautiful.fg_off_widget)
    batbar:set_color(beautiful.gradient)
-   vicious.register(batbar, vicious.widgets.bat, "$2", 60, SYSBAT)
+   vicious.register(batbar, vicious.widgets.bat, "$2", 120, SYSBAT)
+
+   --warning display under BATWARN
+   if BATWARNPCT then
+      vicious.register(
+         batbar, vicious.widgets.bat,
+         function (widget, args)
+            if args[2] < BATWARNPCT and (args[1]=="-" or args[1]=="⌁") then
+               naughty.notify({
+                  preset = naughty.config.presets.critical,
+                  title  = "Battery Warning!",
+                  text   = args[2] .."%" .. " left!"
+               })
+            end
+         end,
+         120, SYSBAT
+      )
+   end
 end
 
 -- Memory usage
@@ -349,9 +365,6 @@ datetip = awful.tooltip({
    end
 })
 vicious.register(datewidget, vicious.widgets.date, "%d/%m %R", 60)
-datewidget:buttons(awful.util.table.join(
-   awful.button({ }, 1, function () exec(bin .. "pylendar.py") end)
-))
 
 -- SysTray
 systray = wibox.widget.systray()

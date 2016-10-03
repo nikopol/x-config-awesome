@@ -12,7 +12,7 @@ TERM     = "urxvt"
 BROWSER  = "chromium"
 EDITOR   = TERM .. " -e vim"
 LOCKER   = "slock"            --bind to MODKEY+SHIFT+L
-FILER    = "nautilus"
+FILER    = "pcmanfm"
 SCREENINFO   = 0              --screen for system tray & info 0=all
 NOTIFYSCREEN = 1              --screen for notification
 NOTIFYPOS    = "top_right"    --position for notification: top_left,top_right,bottom_left,bottom_right
