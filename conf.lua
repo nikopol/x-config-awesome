@@ -1,3 +1,4 @@
+--font used by the theme
 FONT           = 'Envy Code R 10'
 TERM           = 'urxvt'
 LOCKER         = 'slock'

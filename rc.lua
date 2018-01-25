@@ -396,30 +396,30 @@ globalkeys = gears.table.join(
    -- Volume
    awful.key({ modkey, "Shift"   }, "m", function () awesome.spawn(MUSICTOGGLE) end, 
              {description = "un/mute audio", group = "audio"}),
-   awful.key({                   }, "XF86AudioMute", function () awesome.spawn("amixer -q set Master toggle") end, 
+   awful.key({                   }, "XF86AudioMute", function () awesome.spawn(TOG_VOLUME_CMD) end, 
              {description = "un/mute audio", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "Down", function () awesome.spawn("amixer -q set " .. CHAUDIO .. " 2dB-") end, 
+   awful.key({ modkey, "Shift"   }, "Down", function () awesome.spawn(DEC_VOLUME_CMD) end, 
              {description = "decrease audio volume", group = "audio"}),
-   awful.key({                   }, "XF86AudioLowerVolume", function () awesome.spawn("amixer -q set " .. CHAUDIO .. " 2dB-") end, 
+   awful.key({                   }, "XF86AudioLowerVolume", function () awesome.spawn(DEC_VOLUME_CMD) end, 
              {description = "decrease audio volume", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "Up", function () awesome.spawn("amixer -q set " .. CHAUDIO .. " 2dB+")  end, 
+   awful.key({ modkey, "Shift"   }, "Up", function () awesome.spawn(INC_VOLUME_CMD)  end, 
              {description = "increase audio volume", group = "audio"}),
-   awful.key({                   }, "XF86AudioRaiseVolume", function () awesome.spawn("amixer -q set " .. CHAUDIO .. " 2dB+") end, 
+   awful.key({                   }, "XF86AudioRaiseVolume", function () awesome.spawn(INC_VOLUME_CMD) end, 
              {description = "increase audio volume", group = "audio"}),
 
    -- Music player
    awful.key({                   }, "XF86AudioPlay", function () awesome.spawn(MUSICTOGGLE) end, 
-             {description = "play/pause cmus", group = "audio"}),
+             {description = "play/pause music", group = "audio"}),
    awful.key({ modkey, "Shift"   }, "p", function () awesome.spawn(MUSICTOGGLE) end, 
-             {description = "play/pause cmus", group = "audio"}),
+             {description = "play/pause music", group = "audio"}),
    awful.key({ modkey, "Shift"   }, "Left", function () awesome.spawn(MUSICPREV) end, 
-             {description = "previous cmus track", group = "audio"}),
+             {description = "previous music track", group = "audio"}),
    awful.key({                   }, "XF86AudioPrev", function () awesome.spawn(MUSICPREV) end, 
-             {description = "previous cmus track", group = "audio"}),
+             {description = "previous music track", group = "audio"}),
    awful.key({ modkey, "Shift"   }, "Right", function () awesome.spawn(MUSICNEXT) end, 
-             {description = "next cmus track", group = "audio"}),
+             {description = "next music track", group = "audio"}),
    awful.key({                   }, "XF86AudioNext", function () awesome.spawn(MUSICNEXT) end, 
-             {description = "next cmus track", group = "audio"})
+             {description = "next music track", group = "audio"})
 
 
 )
