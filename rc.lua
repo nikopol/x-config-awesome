@@ -135,12 +135,46 @@ menubar.utils.terminal = TERM -- Set the terminal for applications that require 
 -- {{{ Wibar
 
 
+local rwidgets = { layout = wibox.layout.fixed.horizontal }
+
 local cpu_widget = require("widgets.cpu")
+table.insert(rwidgets, cpu_widget)
+table.insert(rwidgets, separator)
+
+local thermal_widget
+if THERMAL_SRC then
+    thermal_widget = require("widgets.thermal")
+    table.insert(rwidgets, thermal_widget)
+    table.insert(rwidgets, separator)
+end
+
 local ram_widget = require("widgets.ram")
-local clock_widget = require("widgets.clock")
-local vol_widget = require("widgets.volume")
-local net_widget = require("widgets.net")
-local thermal_widget = require("widgets.thermal")
+table.insert(rwidgets, ram_widget)
+table.insert(rwidgets, separator)
+
+local net_widget
+if NET_INTERFACE then
+    net_widget = require("widgets.net")
+    table.insert(rwidgets, net_widget)
+    table.insert(rwidgets, separator)
+end
+
+local vol_widget
+if GET_VOLUME_CMD then
+    vol_widget = require("widgets.volume")
+    table.insert(rwidgets, vol_widget)
+    table.insert(rwidgets, separator)
+end
+
+local clock_widget
+if CLOCK_FMT then
+    clock_widget = require("widgets.clock")
+    table.insert(rwidgets, clock_widget)
+    table.insert(rwidgets, separator)
+end
+
+table.insert(rwidgets, wibox.widget.systray())
+
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -237,22 +271,7 @@ awful.screen.connect_for_each_screen(function(s)
             s.mypromptbox,
         },
         s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            cpu_widget,
-            separator,
-            thermal_widget,
-            separator,
-            ram_widget,
-            separator,
-            net_widget,
-            separator,
-            vol_widget,
-            separator,
-            clock_widget,
-            separator,
-            wibox.widget.systray(),
-        },
+        rwidgets
     }
 end)
 -- }}}
