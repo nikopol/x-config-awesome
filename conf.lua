@@ -1,3 +1,5 @@
+FONT           = 'Envy Code R 10'
+--FONT           = 'Monaco 8'
 TERM           = 'urxvt'
 LOCKER         = 'slock'
 CLOCK_FMT      = '%d/%m %R'

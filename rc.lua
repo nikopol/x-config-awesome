@@ -14,6 +14,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+require("conf")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -43,8 +44,6 @@ end
 -- Themes define colours, icons, font and wallpapers.
 --beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 beautiful.init(gears.filesystem.get_configuration_dir().."themes/niko/theme.lua")
-
-require("conf")
 
 -- common separator
 local separator = wibox.container.margin(

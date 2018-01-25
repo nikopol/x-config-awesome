@@ -11,8 +11,7 @@ local theme_path = gfs.get_configuration_dir().."themes/niko/"
 
 local theme = {}
 
-theme.font          = "Envy Code R 10"
---theme.font          = "Monaco 8"
+theme.font          = FONT
 
 theme.bg_normal     = "#3F3F3F"
 theme.bg_focus      = "#1E2320"
