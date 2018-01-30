@@ -56,10 +56,11 @@ local netup_text = wibox.widget {
 
 function netfmt(o)
     local s = ""
-    if     o == nil  then s = "n/a"
-    elseif o == 0    then s = "0"
-    elseif o < 10240 then s = tostring(math.floor(o / 102.4) / 10)
-    else                  s = tostring(math.floor(o / 1024))
+    if     o == nil    then s = "n/a"
+    elseif o == 0      then s = "0"
+    elseif o < 10240   then s = tostring(math.floor(o / 102.4) / 10).."k"
+    elseif o < 2097152 then s = tostring(math.floor(o / 1024)).."k"
+    else                    s = tostring(math.floor(o / 104857.6) / 10).."M"
     end
     return s
 end
