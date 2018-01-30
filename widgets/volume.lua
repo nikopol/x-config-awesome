@@ -32,7 +32,7 @@ local update_vol = function(widget, stdout, _, _, _)
 end
 
 
-watch(GET_VOLUME_CMD, 3, update_vol, vol_graph)
+watch(VOLUME_GET, 3, update_vol, vol_graph)
 
 local vol_icon = wibox.widget {
     widget = wibox.widget.imagebox,
@@ -55,11 +55,11 @@ local vol_layout = wibox.widget {
 }
 
 vol_layout:connect_signal("button::press", function(_, _, _, button)
-    if (button == 4) then awful.spawn(INC_VOLUME_CMD, false)
-    elseif (button == 5) then awful.spawn(DEC_VOLUME_CMD, false)
-    elseif (button == 1) then awful.spawn(TOG_VOLUME_CMD, false)
+    if     (button == 4) then awful.spawn(VOLUME_INC, false)
+    elseif (button == 5) then awful.spawn(VOLUME_DEC, false)
+    elseif (button == 1) then awful.spawn(VOLUME_TOGGLE, false)
     end
-    spawn.easy_async(GET_VOLUME_CMD, function(stdout, stderr, exitreason, exitcode)
+    spawn.easy_async(VOLUME_GET, function(stdout, stderr, exitreason, exitcode)
         update_vol(vol_graph, stdout, stderr, exitreason, exitcode)
     end)
 end)

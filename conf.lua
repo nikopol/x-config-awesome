@@ -13,10 +13,12 @@ NET_INTERFACE  = 'eno1'
 THERMAL_SRC    = '/sys/class/thermal/thermal_zone0/temp'
 
 --volume, comment to disable
-GET_VOLUME_CMD = 'amixer sget Master'
-INC_VOLUME_CMD = 'amixer sset Master 5%+'
-DEC_VOLUME_CMD = 'amixer sset Master 5%-'
-TOG_VOLUME_CMD = 'amixer sset Master toggle'
-MUSIC_PAUSE    = 'cmus-remote --pause'
-MUSIC_NEXT     = 'cmus-remote --next'
-MUSIC_PREV     = 'cmus-remote --prev'
+VOLUME_GET    = 'amixer sget Master'
+VOLUME_INC    = 'amixer sset Master 5%+'
+VOLUME_DEC    = 'amixer sset Master 5%-'
+VOLUME_TOGGLE = 'amixer sset Master toggle'
+
+--music player
+MUSIC_PAUSE   = 'cmus-remote --pause'
+MUSIC_NEXT    = 'cmus-remote --next'
+MUSIC_PREV    = 'cmus-remote --prev'

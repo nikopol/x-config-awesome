@@ -160,7 +160,7 @@ if NET_INTERFACE then
 end
 
 local vol_widget
-if GET_VOLUME_CMD then
+if VOLUME_GET then
     vol_widget = require("widgets.volume")
     table.insert(rwidgets, vol_widget)
     table.insert(rwidgets, separator)
@@ -394,23 +394,23 @@ globalkeys = gears.table.join(
              {description = "lock screens", group = "awesome"}),
 
    -- Volume
-   awful.key({ modkey, "Shift"   }, "m", function () awesome.spawn(MUSIC_TOGGLE) end, 
+   awful.key({ modkey, "Shift"   }, "m", function () awesome.spawn(VOLUME_TOGGLE) end, 
              {description = "un/mute audio", group = "audio"}),
-   awful.key({                   }, "XF86AudioMute", function () awesome.spawn(TOG_VOLUME_CMD) end, 
+   awful.key({                   }, "XF86AudioMute", function () awesome.spawn(VOLUME_TOGGLE) end, 
              {description = "un/mute audio", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "Down", function () awesome.spawn(DEC_VOLUME_CMD) end, 
+   awful.key({ modkey, "Shift"   }, "Down", function () awesome.spawn(VOLUME_DEV) end, 
              {description = "decrease audio volume", group = "audio"}),
-   awful.key({                   }, "XF86AudioLowerVolume", function () awesome.spawn(DEC_VOLUME_CMD) end, 
+   awful.key({                   }, "XF86AudioLowerVolume", function () awesome.spawn(VOLUME_DEC) end, 
              {description = "decrease audio volume", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "Up", function () awesome.spawn(INC_VOLUME_CMD)  end, 
+   awful.key({ modkey, "Shift"   }, "Up", function () awesome.spawn(VOLUME_INC)  end, 
              {description = "increase audio volume", group = "audio"}),
-   awful.key({                   }, "XF86AudioRaiseVolume", function () awesome.spawn(INC_VOLUME_CMD) end, 
+   awful.key({                   }, "XF86AudioRaiseVolume", function () awesome.spawn(VOLUME_INC) end, 
              {description = "increase audio volume", group = "audio"}),
 
    -- Music player
-   awful.key({                   }, "XF86AudioPlay", function () awesome.spawn(MUSIC_TOGGLE) end, 
+   awful.key({                   }, "XF86AudioPlay", function () awesome.spawn(MUSIC_PAUSE) end, 
              {description = "play/pause music", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "p", function () awesome.spawn(MUSIC_TOGGLE) end, 
+   awful.key({ modkey, "Shift"   }, "p", function () awesome.spawn(MUSIC_PAUSE) end, 
              {description = "play/pause music", group = "audio"}),
    awful.key({ modkey, "Shift"   }, "Left", function () awesome.spawn(MUSIC_PREV) end, 
              {description = "previous music track", group = "audio"}),
