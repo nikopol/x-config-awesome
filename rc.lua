@@ -394,7 +394,7 @@ globalkeys = gears.table.join(
              {description = "lock screens", group = "awesome"}),
 
    -- Volume
-   awful.key({ modkey, "Shift"   }, "m", function () awesome.spawn(MUSICTOGGLE) end, 
+   awful.key({ modkey, "Shift"   }, "m", function () awesome.spawn(MUSIC_TOGGLE) end, 
              {description = "un/mute audio", group = "audio"}),
    awful.key({                   }, "XF86AudioMute", function () awesome.spawn(TOG_VOLUME_CMD) end, 
              {description = "un/mute audio", group = "audio"}),
@@ -408,17 +408,17 @@ globalkeys = gears.table.join(
              {description = "increase audio volume", group = "audio"}),
 
    -- Music player
-   awful.key({                   }, "XF86AudioPlay", function () awesome.spawn(MUSICTOGGLE) end, 
+   awful.key({                   }, "XF86AudioPlay", function () awesome.spawn(MUSIC_TOGGLE) end, 
              {description = "play/pause music", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "p", function () awesome.spawn(MUSICTOGGLE) end, 
+   awful.key({ modkey, "Shift"   }, "p", function () awesome.spawn(MUSIC_TOGGLE) end, 
              {description = "play/pause music", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "Left", function () awesome.spawn(MUSICPREV) end, 
+   awful.key({ modkey, "Shift"   }, "Left", function () awesome.spawn(MUSIC_PREV) end, 
              {description = "previous music track", group = "audio"}),
-   awful.key({                   }, "XF86AudioPrev", function () awesome.spawn(MUSICPREV) end, 
+   awful.key({                   }, "XF86AudioPrev", function () awesome.spawn(MUSIC_PREV) end, 
              {description = "previous music track", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "Right", function () awesome.spawn(MUSICNEXT) end, 
+   awful.key({ modkey, "Shift"   }, "Right", function () awesome.spawn(MUSIC_NEXT) end, 
              {description = "next music track", group = "audio"}),
-   awful.key({                   }, "XF86AudioNext", function () awesome.spawn(MUSICNEXT) end, 
+   awful.key({                   }, "XF86AudioNext", function () awesome.spawn(MUSIC_NEXT) end, 
              {description = "next music track", group = "audio"})
 
 
