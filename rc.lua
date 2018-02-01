@@ -398,7 +398,7 @@ globalkeys = gears.table.join(
              {description = "un/mute audio", group = "audio"}),
    awful.key({                   }, "XF86AudioMute", function () awesome.spawn(VOLUME_TOGGLE) end, 
              {description = "un/mute audio", group = "audio"}),
-   awful.key({ modkey, "Shift"   }, "Down", function () awesome.spawn(VOLUME_DEV) end, 
+   awful.key({ modkey, "Shift"   }, "Down", function () awesome.spawn(VOLUME_DEC) end, 
              {description = "decrease audio volume", group = "audio"}),
    awful.key({                   }, "XF86AudioLowerVolume", function () awesome.spawn(VOLUME_DEC) end, 
              {description = "decrease audio volume", group = "audio"}),
