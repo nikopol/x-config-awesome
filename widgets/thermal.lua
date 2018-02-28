@@ -3,6 +3,7 @@ local gears = require("gears")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
+local tools = require("widgets.tools")
 
 local thermal_text = wibox.widget {
     text   = '?',
@@ -19,12 +20,9 @@ local thermal_icon = wibox.widget {
 
 function thermalinfo()
     local temp = "-"
-    for line in io.lines(THERMAL_SRC) do
-        local val = string.match(line, "(%d+)")
-        if val ~= nil then
-          temp = math.floor(val / 100) / 10
-          break
-        end
+    local val = tools.loadnum(THERMAL_SRC)
+    if val ~= nil then
+        temp = math.floor(val / 100) / 10
     end
     return temp.."°"
 end
