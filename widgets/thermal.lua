@@ -20,7 +20,7 @@ local thermal_icon = wibox.widget {
 
 function thermalinfo()
     local temp = "-"
-    local val = tools.loadnum(THERMAL_SRC)
+    local val = tools.readnum(THERMAL_SRC)
     if val ~= nil then
         temp = math.floor(val / 100) / 10
     end

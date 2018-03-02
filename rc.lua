@@ -1,3 +1,5 @@
+-- niko's awesome 4.2+ conf
+
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -156,6 +158,13 @@ local net_widget
 if NET_INTERFACE then
     net_widget = require("widgets.net")
     table.insert(rwidgets, net_widget)
+    table.insert(rwidgets, separator)
+end
+
+local batt_widget
+if BATTERY_SRC then
+    batt_widget = require("widgets.battery")
+    table.insert(rwidgets, batt_widget)
     table.insert(rwidgets, separator)
 end
 
